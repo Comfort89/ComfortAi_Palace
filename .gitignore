@@ -1,0 +1,9 @@
+# Root ignores for ComfortZone Palace
+app/node_modules/
+app/.next/
+app/out/
+app/*.log
+app/.env*.local
+ComfortZone_Palace/.git/
+.DS_Store
+*.log
