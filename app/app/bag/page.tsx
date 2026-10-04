@@ -48,7 +48,7 @@ export default function BagPage() {
               <div className="mt-1 flex justify-between"><span>Delivery</span><span>{delivery === 0 ? "Free" : naira(delivery)}</span></div>
               <div className="mt-2 flex justify-between font-extrabold text-base"><span>Total</span><span>{naira(subtotal + delivery)}</span></div>
               <p className="mt-2 text-xs text-muted">Checkout & payment arrive in Phase 4.</p>
-              <button className="mt-4 w-full rounded-full bg-espresso px-8 py-3 font-bold text-[#FFF8EC]">Proceed to Checkout</button>
+              <Link href="/checkout" className="mt-4 block w-full rounded-full bg-espresso px-8 py-3 text-center font-bold text-[#FFF8EC]">Proceed to Checkout</Link>
             </div>
           </>
         )}

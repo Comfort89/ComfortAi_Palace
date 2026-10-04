@@ -87,6 +87,7 @@ model User {
   accounts      Account[]
   sessions      Session[]
   addresses     Address[]
+  orders        Order[]
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 }
@@ -137,4 +138,51 @@ model Address {
   state        String
   instructions String?
   createdAt    DateTime @default(now())
+}
+
+model Order {
+  id            String      @id @default(cuid())
+  orderNo       String      @unique
+  userId        String?
+  user          User?       @relation(fields: [userId], references: [id], onDelete: SetNull)
+  email         String?
+  status        String      @default("Confirmed")
+  subtotal      Int
+  deliveryFee   Int
+  total         Int
+  fullName      String
+  phone         String
+  address       String
+  city          String
+  state         String
+  instructions  String?
+  paymentMethod String      @default("card-test")
+  paymentStatus String      @default("pending")
+  items         OrderItem[]
+  payments      Payment[]
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+}
+
+model OrderItem {
+  id         String  @id @default(cuid())
+  orderId    String
+  order      Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId  String
+  name       String
+  size       String
+  colour     String
+  priceNaira Int
+  qty        Int
+}
+
+model Payment {
+  id        String   @id @default(cuid())
+  orderId   String
+  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  provider  String   @default("paystack-test")
+  reference String   @unique
+  amount    Int
+  status    String   @default("pending")
+  createdAt DateTime @default(now())
 }
