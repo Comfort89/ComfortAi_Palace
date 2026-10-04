@@ -1,4 +1,6 @@
-type Product = {
+import { prisma } from "@/lib/prisma";
+
+type Card = {
   id: string;
   name: string;
   tag: string;
@@ -8,37 +10,53 @@ type Product = {
   gradient: string;
 };
 
-const products: Product[] = [
-  {
-    id: "amara",
-    name: "The Amara Dress",
-    tag: "Evening • African-inspired",
-    price: "₦85,000",
-    sizes: "XS – XL",
-    badge: "New",
-    gradient: "from-rose via-rosedeep to-espresso"
-  },
-  {
-    id: "zuri",
-    name: "Zuri Luxury Set",
-    tag: "Two-piece • Weekend Edit",
-    price: "₦72,500",
-    sizes: "S – XXL",
-    badge: "Only 3 Left",
-    gradient: "from-emerald via-cocoa to-gold"
-  },
-  {
-    id: "adaeze",
-    name: "Adaeze Dinner Gown",
-    tag: "Occasion wear • Statement",
-    price: "₦98,000",
-    sizes: "XS – L",
-    badge: "Best Seller",
-    gradient: "from-cream via-wine to-espresso"
-  }
+const fallback: Card[] = [
+  { id: "amara", name: "The Amara Dress", tag: "Evening • African-inspired", price: "₦85,000", sizes: "XS – XL", badge: "New", gradient: "from-rose via-rosedeep to-espresso" },
+  { id: "zuri", name: "Zuri Luxury Set", tag: "Two-piece • Weekend Edit", price: "₦72,500", sizes: "S – XXL", badge: "Only 3 Left", gradient: "from-emerald via-cocoa to-gold" },
+  { id: "adaeze", name: "Adaeze Dinner Gown", tag: "Occasion wear • Statement", price: "₦98,000", sizes: "XS – L", badge: "Best Seller", gradient: "from-cream via-wine to-espresso" }
 ];
 
-export default function Home() {
+const gradients = [
+  "from-rose via-rosedeep to-espresso",
+  "from-emerald via-cocoa to-gold",
+  "from-cream via-wine to-espresso"
+];
+
+function naira(n: number) {
+  return "₦" + n.toLocaleString("en-NG");
+}
+
+async function getProducts(): Promise<{ cards: Card[]; live: boolean }> {
+  try {
+    const products = await prisma.product.findMany({
+      where: { available: true },
+      include: { category: true, variants: true },
+      orderBy: { createdAt: "asc" },
+      take: 6
+    });
+    if (products.length === 0) return { cards: fallback, live: false };
+    const cards: Card[] = products.map((p, i) => {
+      const sizes = Array.from(new Set(p.variants.map((v) => v.size))).join(" • ") || "One size";
+      const badge = p.isNew ? "New" : p.isBestSeller ? "Best Seller" : p.trending ? "Trending" : p.category.name;
+      return {
+        id: p.id,
+        name: p.name,
+        tag: `${p.category.name} • ${p.fit ?? "True to size"}`,
+        price: naira(p.priceNaira),
+        sizes,
+        badge,
+        gradient: gradients[i % gradients.length]
+      };
+    });
+    return { cards, live: true };
+  } catch {
+    return { cards: fallback, live: false };
+  }
+}
+
+export default async function Home() {
+  const { cards, live } = await getProducts();
+
   return (
     <main className="min-h-screen bg-ivory text-espresso">
       <div className="bg-espresso text-center text-[12px] uppercase tracking-[0.15em] text-[#F6EDDD] px-4 py-2">
@@ -51,7 +69,7 @@ export default function Home() {
             ComfortZone <span className="italic text-golddark">Palace</span>
           </div>
           <nav className="hidden gap-5 text-sm text-cocoa md:flex">
-            <a href="#" className="hover:text-espresso">New Arrivals</a>
+            <a href="#new-arrivals" className="hover:text-espresso">New Arrivals</a>
             <a href="#" className="hover:text-espresso">Dresses</a>
             <a href="#" className="hover:text-espresso">Two-Piece</a>
             <a href="#" className="hover:text-espresso">Occasion Wear</a>
@@ -108,13 +126,13 @@ export default function Home() {
           <div className="mb-5 flex items-end justify-between">
             <div>
               <h2 className="font-serif text-3xl">New Arrivals</h2>
-              <p className="text-sm text-muted">Sample data — no database yet</p>
+              <p className="text-sm text-muted">{live ? "Live from PostgreSQL" : "Sample data — DB not connected"}</p>
             </div>
             <span className="text-sm font-semibold text-wine">View all →</span>
           </div>
 
           <div className="grid gap-4 md:grid-cols-3">
-            {products.map((p) => (
+            {cards.map((p) => (
               <article
                 key={p.id}
                 className="overflow-hidden rounded-2xl border border-line bg-white shadow-[0_12px_32px_rgba(43,33,24,0.10)]"
@@ -141,7 +159,7 @@ export default function Home() {
       </div>
 
       <footer className="border-t border-line px-5 py-6 text-center text-[13px] text-muted">
-        ComfortZone Palace • Luxury that feels like you • Task 3 prototype — static data only
+        ComfortZone Palace • Luxury that feels like you • Phase 1 — PostgreSQL catalog
       </footer>
     </main>
   );
