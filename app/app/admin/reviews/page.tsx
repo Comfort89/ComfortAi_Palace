@@ -3,6 +3,8 @@ import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/require-admin";
 import { deleteReview } from "@/lib/admin-ops";
 
+export const dynamic = 'force-dynamic';
+
 export default async function AdminReviews() {
   await requireAdmin();
   const reviews = await prisma.review.findMany({ orderBy: { createdAt: "desc" }, take: 50, include: { product: { select: { name: true, slug: true } } } });

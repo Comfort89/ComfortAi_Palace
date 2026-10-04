@@ -5,6 +5,8 @@ import { requireAdmin, } from "@/lib/require-admin";
 import { updateOrderStatus } from "@/lib/admin-ops";
 import { ORDER_STATUSES } from "@/lib/order-status";
 
+export const dynamic = 'force-dynamic';
+
 function naira(n: number) {
   return "₦" + n.toLocaleString("en-NG");
 }

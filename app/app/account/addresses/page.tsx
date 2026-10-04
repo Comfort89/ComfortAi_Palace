@@ -5,6 +5,8 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { addAddress, deleteAddress } from "@/lib/address-actions";
 
+export const dynamic = 'force-dynamic';
+
 export default async function AddressesPage() {
   const session = await getServerSession(authOptions);
   const id = (session?.user as { id?: string } | undefined)?.id;

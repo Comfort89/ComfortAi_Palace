@@ -3,6 +3,8 @@ import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/require-admin";
 import { setUserRole } from "@/lib/admin-ops";
 
+export const dynamic = 'force-dynamic';
+
 export default async function AdminCustomers() {
   await requireAdmin();
   const users = await prisma.user.findMany({ orderBy: { createdAt: "desc" }, take: 50, include: { _count: { select: { orders: true } } } });

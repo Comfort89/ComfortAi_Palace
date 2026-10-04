@@ -2,6 +2,8 @@ import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/require-admin";
 
+export const dynamic = 'force-dynamic';
+
 function naira(n: number) {
   return "₦" + n.toLocaleString("en-NG");
 }

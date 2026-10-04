@@ -3,6 +3,8 @@ import { prisma } from "@/lib/prisma";
 import { toggleAvailability } from "@/lib/admin-actions";
 import { requireAdmin } from "@/lib/require-admin";
 
+export const dynamic = 'force-dynamic';
+
 function naira(n: number) {
   return "₦" + n.toLocaleString("en-NG");
 }

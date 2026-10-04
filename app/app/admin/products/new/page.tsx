@@ -2,6 +2,8 @@ import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { createProduct } from "@/lib/admin-actions";
 
+export const dynamic = 'force-dynamic';
+
 export default async function NewProductPage() {
   const categories = await prisma.category.findMany({ orderBy: { name: "asc" } });
 

@@ -3,6 +3,8 @@ import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/require-admin";
 import { setSupportHandled } from "@/lib/admin-ops";
 
+export const dynamic = 'force-dynamic';
+
 export default async function AdminSupport() {
   await requireAdmin();
   const messages = await prisma.supportMessage.findMany({ orderBy: { createdAt: "desc" }, take: 50 });

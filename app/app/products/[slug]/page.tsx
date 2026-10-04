@@ -4,6 +4,8 @@ import { prisma } from "@/lib/prisma";
 import BuyBox from "@/components/BuyBox";
 import Reviews from "@/components/Reviews";
 
+export const dynamic = 'force-dynamic';
+
 function naira(n: number) {
   return "₦" + n.toLocaleString("en-NG");
 }
