@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import BuyBox from "@/components/BuyBox";
+import Reviews from "@/components/Reviews";
 
 function naira(n: number) {
   return "₦" + n.toLocaleString("en-NG");
@@ -10,7 +11,7 @@ function naira(n: number) {
 export default async function ProductPage({ params }: { params: { slug: string } }) {
   const product = await prisma.product.findUnique({
     where: { slug: params.slug },
-    include: { category: true, images: true, variants: true }
+    include: { category: true, images: true, variants: true, reviews: { orderBy: { createdAt: "desc" }, take: 20 } }
   });
   if (!product || !product.available) notFound();
 
@@ -54,6 +55,10 @@ export default async function ProductPage({ params }: { params: { slug: string }
             <p className="mt-3 text-xs text-muted">Bag saves on this device. Checkout & payment arrive in Phase 4.</p>
           </div>
         </div>
+        <Reviews
+          productId={product.id}
+          reviews={product.reviews.map((r) => ({ id: r.id, name: r.name, rating: r.rating, text: r.text, fit: r.fit }))}
+        />
       </div>
     </main>
   );

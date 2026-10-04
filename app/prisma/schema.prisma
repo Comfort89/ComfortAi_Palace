@@ -44,6 +44,7 @@ model Product {
   images            ProductImage[]
   variants          Variant[]
   collections       ProductCollection[]
+  reviews           Review[]
   createdAt         DateTime            @default(now())
   updatedAt         DateTime            @updatedAt
 }
@@ -88,6 +89,7 @@ model User {
   sessions      Session[]
   addresses     Address[]
   orders        Order[]
+  reviews       Review[]
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
 }
@@ -184,5 +186,28 @@ model Payment {
   reference String   @unique
   amount    Int
   status    String   @default("pending")
+  createdAt DateTime @default(now())
+}
+
+model Review {
+  id        String   @id @default(cuid())
+  productId String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  name      String   @default("Verified buyer")
+  rating    Int
+  text      String
+  fit       String?
+  createdAt DateTime @default(now())
+}
+
+model SupportMessage {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  topic     String   @default("General")
+  message   String
+  handled   Boolean  @default(false)
   createdAt DateTime @default(now())
 }

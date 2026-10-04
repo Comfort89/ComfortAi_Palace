@@ -164,7 +164,14 @@ export default async function Home() {
       </div>
 
       <footer className="border-t border-line px-5 py-6 text-center text-[13px] text-muted">
-        ComfortZone Palace • Luxury that feels like you • Phase 1 — PostgreSQL catalog
+        <p>ComfortZone Palace • Luxury that feels like you</p>
+        <p className="mt-2">
+          <Link href="/delivery" className="underline">Delivery</Link> •{" "}
+          <Link href="/returns" className="underline">Returns & Exchanges</Link> •{" "}
+          <Link href="/size-guide" className="underline">Size Guide</Link> •{" "}
+          <Link href="/help" className="underline">Chat With Us</Link> •{" "}
+          <Link href="/orders" className="underline">My Orders</Link>
+        </p>
       </footer>
     </main>
   );
