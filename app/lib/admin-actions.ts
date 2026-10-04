@@ -3,12 +3,14 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
+import { requireAdmin } from "@/lib/require-admin";
 
 function slugify(s: string) {
   return s.toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 }
 
 export async function createProduct(formData: FormData) {
+  await requireAdmin();
   const name = String(formData.get("name") ?? "").trim();
   const slugRaw = String(formData.get("slug") ?? "").trim();
   const description = String(formData.get("description") ?? "").trim();
@@ -44,6 +46,7 @@ export async function createProduct(formData: FormData) {
 }
 
 export async function updateProduct(id: string, formData: FormData) {
+  await requireAdmin();
   const name = String(formData.get("name") ?? "").trim();
   const description = String(formData.get("description") ?? "").trim();
   const priceNaira = parseInt(String(formData.get("priceNaira") ?? "0"), 10);
@@ -66,6 +69,7 @@ export async function updateProduct(id: string, formData: FormData) {
 }
 
 export async function toggleAvailability(id: string, available: boolean) {
+  await requireAdmin();
   await prisma.product.update({ where: { id }, data: { available } });
   revalidatePath("/");
   revalidatePath("/admin");

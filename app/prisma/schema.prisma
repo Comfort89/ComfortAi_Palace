@@ -83,6 +83,7 @@ model User {
   name          String?
   email         String    @unique
   passwordHash  String?
+  role          String    @default("CUSTOMER")
   emailVerified DateTime?
   image         String?
   accounts      Account[]
