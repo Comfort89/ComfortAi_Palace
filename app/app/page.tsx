@@ -1,7 +1,9 @@
+import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 
 type Card = {
   id: string;
+  slug: string;
   name: string;
   tag: string;
   price: string;
@@ -11,9 +13,9 @@ type Card = {
 };
 
 const fallback: Card[] = [
-  { id: "amara", name: "The Amara Dress", tag: "Evening • African-inspired", price: "₦85,000", sizes: "XS – XL", badge: "New", gradient: "from-rose via-rosedeep to-espresso" },
-  { id: "zuri", name: "Zuri Luxury Set", tag: "Two-piece • Weekend Edit", price: "₦72,500", sizes: "S – XXL", badge: "Only 3 Left", gradient: "from-emerald via-cocoa to-gold" },
-  { id: "adaeze", name: "Adaeze Dinner Gown", tag: "Occasion wear • Statement", price: "₦98,000", sizes: "XS – L", badge: "Best Seller", gradient: "from-cream via-wine to-espresso" }
+  { id: "amara", slug: "amara-dress", name: "The Amara Dress", tag: "Evening • African-inspired", price: "₦85,000", sizes: "XS – XL", badge: "New", gradient: "from-rose via-rosedeep to-espresso" },
+  { id: "zuri", slug: "zuri-luxury-set", name: "Zuri Luxury Set", tag: "Two-piece • Weekend Edit", price: "₦72,500", sizes: "S – XXL", badge: "Only 3 Left", gradient: "from-emerald via-cocoa to-gold" },
+  { id: "adaeze", slug: "adaeze-dinner-gown", name: "Adaeze Dinner Gown", tag: "Occasion wear • Statement", price: "₦98,000", sizes: "XS – L", badge: "Best Seller", gradient: "from-cream via-wine to-espresso" }
 ];
 
 const gradients = [
@@ -40,6 +42,7 @@ async function getProducts(): Promise<{ cards: Card[]; live: boolean }> {
       const badge = p.isNew ? "New" : p.isBestSeller ? "Best Seller" : p.trending ? "Trending" : p.category.name;
       return {
         id: p.id,
+        slug: p.slug,
         name: p.name,
         tag: `${p.category.name} • ${p.fit ?? "True to size"}`,
         price: naira(p.priceNaira),
@@ -70,9 +73,9 @@ export default async function Home() {
           </div>
           <nav className="hidden gap-5 text-sm text-cocoa md:flex">
             <a href="#new-arrivals" className="hover:text-espresso">New Arrivals</a>
-            <a href="#" className="hover:text-espresso">Dresses</a>
-            <a href="#" className="hover:text-espresso">Two-Piece</a>
-            <a href="#" className="hover:text-espresso">Occasion Wear</a>
+            <Link href="/categories/dresses" className="hover:text-espresso">Dresses</Link>
+            <Link href="/categories/two-piece" className="hover:text-espresso">Two-Piece</Link>
+            <Link href="/categories/occasion-wear" className="hover:text-espresso">Occasion Wear</Link>
           </nav>
           <div className="flex gap-2 text-sm">
             <span className="rounded-full border border-line bg-white px-3 py-2">♡</span>
@@ -133,8 +136,9 @@ export default async function Home() {
 
           <div className="grid gap-4 md:grid-cols-3">
             {cards.map((p) => (
-              <article
+              <Link
                 key={p.id}
+                href={`/products/${p.slug}`}
                 className="overflow-hidden rounded-2xl border border-line bg-white shadow-[0_12px_32px_rgba(43,33,24,0.10)]"
               >
                 <div className={`relative h-52 bg-gradient-to-b ${p.gradient}`}>
@@ -152,7 +156,7 @@ export default async function Home() {
                     </span>
                   </div>
                 </div>
-              </article>
+              </Link>
             ))}
           </div>
         </section>
