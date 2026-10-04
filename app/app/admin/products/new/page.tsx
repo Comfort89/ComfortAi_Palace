@@ -1,8 +1,12 @@
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { createProduct } from "@/lib/admin-actions";
+import { requireAdmin } from "@/lib/require-admin";
+
+export const dynamic = "force-dynamic";
 
 export default async function NewProductPage() {
+  await requireAdmin();
   const categories = await prisma.category.findMany({ orderBy: { name: "asc" } });
 
   return (

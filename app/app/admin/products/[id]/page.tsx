@@ -2,8 +2,10 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { updateProduct } from "@/lib/admin-actions";
+import { requireAdmin } from "@/lib/require-admin";
 
 export default async function EditProductPage({ params }: { params: { id: string } }) {
+  await requireAdmin();
   const product = await prisma.product.findUnique({ where: { id: params.id } });
   if (!product) notFound();
   const update = updateProduct.bind(null, product.id);
