@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
+import BuyBox from "@/components/BuyBox";
 
 function naira(n: number) {
   return "₦" + n.toLocaleString("en-NG");
@@ -39,19 +40,18 @@ export default async function ProductPage({ params }: { params: { slug: string }
               {product.deliveryEstimate && <div><dt className="inline font-semibold">Delivery: </dt><dd className="inline">{product.deliveryEstimate}</dd></div>}
             </dl>
             <h2 className="mt-6 font-serif text-xl">Select Size & Colour</h2>
-            <div className="mt-2 space-y-2">
-              {product.variants.map((v) => (
-                <div key={v.id} className="flex items-center justify-between rounded-xl border border-line bg-white px-4 py-2 text-sm">
-                  <span>{v.size} • {v.colour}</span>
-                  <span className="text-muted">{v.stock > 0 ? `${v.stock} in stock` : "Sold out"}</span>
-                </div>
-              ))}
+            <div className="mt-2">
+              <BuyBox
+                product={{
+                  id: product.id,
+                  slug: product.slug,
+                  name: product.name,
+                  priceNaira: product.priceNaira,
+                  variants: product.variants.map((v) => ({ id: v.id, size: v.size, colour: v.colour, stock: v.stock }))
+                }}
+              />
             </div>
-            <div className="mt-6 flex gap-3">
-              <button className="rounded-full bg-espresso px-8 py-3 font-bold text-[#FFF8EC]">Add to Bag</button>
-              <button className="rounded-full border border-espresso px-8 py-3 font-bold">Buy Now</button>
-            </div>
-            <p className="mt-3 text-xs text-muted">Checkout & payment arrive in Phase 4 — buttons are visual only.</p>
+            <p className="mt-3 text-xs text-muted">Bag saves on this device. Checkout & payment arrive in Phase 4.</p>
           </div>
         </div>
       </div>

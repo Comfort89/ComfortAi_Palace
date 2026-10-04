@@ -76,10 +76,11 @@ export default async function Home() {
             <Link href="/categories/dresses" className="hover:text-espresso">Dresses</Link>
             <Link href="/categories/two-piece" className="hover:text-espresso">Two-Piece</Link>
             <Link href="/categories/occasion-wear" className="hover:text-espresso">Occasion Wear</Link>
+            <Link href="/search" className="hover:text-espresso">Search</Link>
           </nav>
           <div className="flex gap-2 text-sm">
-            <span className="rounded-full border border-line bg-white px-3 py-2">♡</span>
-            <span className="rounded-full border border-line bg-white px-3 py-2">👜</span>
+            <Link href="/wishlist" className="rounded-full border border-line bg-white px-3 py-2">♡</Link>
+            <Link href="/bag" className="rounded-full border border-line bg-white px-3 py-2">👜</Link>
           </div>
         </div>
       </header>
