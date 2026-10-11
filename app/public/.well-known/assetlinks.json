@@ -1,0 +1,1 @@
+[{"relation": ["delegate_permission/common.handle_all_urls"], "target": {"namespace": "android_app", "package_name": "com.comfortzone.palace", "sha256_cert_fingerprints": ["82:90:EB:02:DE:89:49:05:C9:E1:3C:67:3E:04:32:3A:FD:DF:8D:27:E1:16:40:3E:E7:09:FB:C1:AD:CD:0D:FE"]}}]
