@@ -1,0 +1,11 @@
+ComfortZone Palace v1.0.0 — release checksums (SHA-256)
+===========================================================
+ComfortZonePalace-v1.0.0-release.apk
+C232E49298DBCDDB5AFD4C064FA5BDEC446967127792B636E6994CD84AF5ED0E
+
+ComfortZonePalace-v1.0.0-release.aab  (for Google Play upload)
+83475C356972EA724D5A517A0FFB8B4F84F68A1E617BF1B40EC5244853070448
+
+Signing certificate SHA-256 (must match assetlinks + keystore):
+82:90:EB:02:DE:89:49:05:C9:E1:3C:67:3E:04:32:3A:FD:DF:8D:27:E1:16:40:3E:E7:09:FB:C1:AD:CD:0D:FE
+Package: com.comfortzone.palace | versionCode 1 | minSdk 24 (Android 7.0+)
